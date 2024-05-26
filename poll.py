@@ -1,4 +1,6 @@
-import requests, time, subprocess, platform
+import requests, time, subprocess, platform, dotenv, os
+dotenv.load_dotenv()
+HOST = os.getenv('HOST')
 
 def notify(user_msg):
     """Function to notify the user"""
@@ -20,12 +22,12 @@ def notify(user_msg):
 # Request from http://127.0.0.1:5000/msg
 while True:
     try:
-        res = requests.get("http://127.0.0.1:5000/msg").json()
+        res = requests.get(f"{HOST}/msg").json()
         if res['global_msg']:
             print(res['global_msg'])
             notify(res['global_msg'])
             time.sleep(5)  # Wait 5 seconds so all computers see the message
-            requests.post("http://127.0.0.1:5000/reset")
+            requests.post(f"{HOST}/reset")
         else:
             print("No new messages.")
             time.sleep(1)
